@@ -1,13 +1,12 @@
 import asyncio
 import logging
 import time
+import snscrape.modules.twitter as sntwitter
 from collections import Counter
 from datetime import datetime, timedelta
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler
 
-# Импортируем snscrape для поиска в Twitter
-import snscrape.modules.twitter as sntwitter
-
-# Настроим логирование
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,8 +19,6 @@ def analyze_hashtags_and_collect_links(target_hashtag, max_tweets=50, max_links=
     since_time = now - timedelta(hours=2)
     query = f'{target_hashtag} since:{since_time.date()} lang:en'
     
-    logger.info(f"Executing query: {query}")  # Логируем запрос
-
     attempt = 0
     while attempt < retries:
         try:
@@ -83,13 +80,20 @@ async def analyze(update, context):
         logger.error(f"Error processing command: {str(e)}")
         await update.message.reply_text(f"An error occurred: {str(e)}")
 
+async def start(update: Update, context):
+    await update.message.reply("Привет!")
+
 def main():
     token = "7976774747:AAEqZ02YI-SuWkv_X1ZXJTHtw5E51HcO51g"
-    app = ApplicationBuilder().token(token).build()
-    app.add_handler(CommandHandler("analyze", analyze))
+
+    application = ApplicationBuilder().token(token).build()
+
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("analyze", analyze))
 
     logger.info("Bot started.")
-    app.run_polling()
+    application.run_polling()
 
 if __name__ == "__main__":
     main()
+
