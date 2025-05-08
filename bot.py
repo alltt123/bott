@@ -23,13 +23,15 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def analyze_hashtags_and_collect_links(target_hashtag, max_tweets=100, max_links=5):
+def analyze_hashtags_and_collect_links(target_hashtag, max_tweets=50, max_links=5):
     hashtag_counts = Counter()
     tweet_links = []
 
     now = datetime.utcnow()
     since_time = now - timedelta(hours=2)
     query = f'{target_hashtag} since:{since_time.date()} lang:en'
+
+    logger.info(f"Executing query: {query}")  # Логируем запрос
 
     for i, tweet in enumerate(sntwitter.TwitterSearchScraper(query).get_items()):
         if i >= max_tweets:
@@ -90,5 +92,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
