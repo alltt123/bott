@@ -73,7 +73,7 @@ async def analyze(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("😕 No tweets found in the last 2 hours.")
 
 def main():
-    token = "AAEqZ02YI-SuWkv_X1ZXJTHtw5E51HcO51"
+    token = "7976774747:AAEqZ02YI-SuWkv_X1ZXJTHtw5E51HcO51g"
     app = ApplicationBuilder().token(token).build()
     app.add_handler(CommandHandler("analyze", analyze))
     print("🤖 Бот запущен.")
