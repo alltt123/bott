@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 import importlib.util
 import snscrape.modules
 
-# Adjusting import logic to be compatible with Python 3.12+
 if hasattr(importlib.util, 'find_spec'):
     for module_name in ['twitter']:
         spec = importlib.util.find_spec(f"snscrape.modules.{module_name}")
@@ -73,12 +72,13 @@ async def analyze(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text("😕 No tweets found in the last 2 hours.")
 
-async def main():
+def main():
     token = os.getenv("BOT_TOKEN")
     app = ApplicationBuilder().token(token).build()
     app.add_handler(CommandHandler("analyze", analyze))
-    print("🤖 Bot is running.")
-    await app.run_polling()
+    print("🤖 Бот запущен.")
+    app.run_polling()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
+
